@@ -153,15 +153,8 @@ async def auth_google(request:Request):
     if(access_token):
         user_info = requests.get("https://www.googleapis.com/oauth2/v1/userinfo", headers={"Authorization": f"Bearer {access_token}"})
         print(user_info.json())
-        email = user_info.json().get("email")
-        if email and email.endswith("@iitj.ac.in"):
-             token = create_access_token({"role":"1","id":user_info.json().get("id")})
-             return {"success":True, "user":user_info.json(),"token":access_token,"refresh":refresh_token,"jwt_token":token}
-        else:
-            return {
-                "success": False,
-                "message": "Email must end with @iitj.ac.in"
-            }
+        token = create_access_token({"role":"1","id":user_info.json().get("id")})
+        return {"success":True, "user":user_info.json(),"token":access_token,"refresh":refresh_token,"jwt_token":token}
     else:
         return {
             "success": False,
